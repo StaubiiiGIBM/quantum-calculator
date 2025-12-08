@@ -1,0 +1,33 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Processing
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="loading-content">
+  <div class="loading-container">
+    <ion-card *ngIf="hasImage && imageData" class="thinking-face">
+      <ion-card-content>
+        <ion-img [src]="imageData"></ion-img>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="progress-card">
+      <ion-card-content>
+        <ion-text>
+          <h3>{{ currentMessage }}</h3>
+        </ion-text>
+        <ion-progress-bar
+          [value]="progress"
+          color="primary"
+          class="loading-bar"
+        ></ion-progress-bar>
+        <ion-text class="percentage">
+          <p>{{ (progress * 100).toFixed(0) }}%</p>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
