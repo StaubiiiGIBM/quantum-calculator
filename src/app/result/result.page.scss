@@ -1,0 +1,58 @@
+.result-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+}
+
+.result-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.result-card h2 {
+  font-size: 1.2rem;
+  color: var(--ion-color-medium);
+  margin-bottom: 10px;
+}
+
+.result-value {
+  font-size: 3rem;
+  color: var(--ion-color-primary);
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.timestamp {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium);
+  margin-top: 10px;
+}
+
+.inaccuracy-note {
+  font-size: 0.85rem;
+  color: var(--ion-color-warning);
+  font-style: italic;
+}
+
+.no-result-card {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.time-small {
+  font-size: 0.75rem !important;
+  color: var(--ion-color-medium) !important;
+}

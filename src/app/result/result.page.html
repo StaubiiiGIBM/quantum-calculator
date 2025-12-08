@@ -1,0 +1,92 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Result
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="result-content">
+  <div class="result-container">
+    <ion-card *ngIf="latestCalculation || displayValue" class="result-card">
+      <ion-card-content>
+        <ion-text>
+          <h2>{{ displayExpression || (latestCalculation?.expression) }}</h2>
+          <h1 class="result-value">{{ displayValue ?? latestCalculation?.result }}</h1>
+          <p class="timestamp" *ngIf="latestCalculation">
+            {{ getFormattedDate(latestCalculation.timestamp) }}
+          </p>
+          <p class="inaccuracy-note">
+            (Within ±{{ latestCalculation?.inaccuracy ?? 1 }}% accuracy)
+          </p>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="!latestCalculation" class="no-result-card">
+      <ion-card-content class="ion-text-center">
+        <ion-text>
+          <h2>No calculation yet</h2>
+          <p>Start by taking a photo and performing a calculation!</p>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="button-group">
+      <ion-button expand="block" color="primary" (click)="openHistory()">
+        <ion-icon name="book" slot="start"></ion-icon>
+        View History
+      </ion-button>
+
+      <ion-button expand="block" color="success" (click)="goToCamera()">
+        Take Photo
+      </ion-button>
+
+      <ion-button expand="block" color="secondary" (click)="goToCalculator()">
+        New Calculation
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <ion-modal [isOpen]="showHistory" (didDismiss)="closeHistory()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Calculation History</ion-title>
+          <ion-button slot="end" fill="clear" (click)="closeHistory()">
+            Close
+          </ion-button>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content>
+        <ion-list *ngIf="calculationHistory.length > 0">
+          <ion-item *ngFor="let item of calculationHistory">
+            <ion-label>
+              <h2>{{ item.expression }}</h2>
+              <p>= {{ item.result }}</p>
+              <p class="time-small">{{ getFormattedDate(item.timestamp) }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="calculationHistory.length === 0" class="ion-padding">
+          <ion-text>
+            <p>No calculation history yet.</p>
+          </ion-text>
+        </div>
+
+        <ion-button
+          *ngIf="calculationHistory.length > 0"
+          expand="block"
+          color="danger"
+          (click)="clearHistory()"
+          class="ion-margin"
+        >
+          Clear History
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
