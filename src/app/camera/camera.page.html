@@ -1,0 +1,50 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Thinking Face
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div class="camera-container">
+    <ion-text>
+      <h2>Give us your best thinking face!</h2>
+      <p>Take a photo to get started with your calculation.</p>
+    </ion-text>
+
+    <ion-card *ngIf="!photoData" class="camera-placeholder">
+      <ion-card-content class="ion-text-center">
+        <ion-icon name="camera" size="large"></ion-icon>
+        <p>No photo yet</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="photoData" class="photo-preview">
+      <ion-card-content>
+        <ion-img [src]="photoData"></ion-img>
+      </ion-card-content>
+    </ion-card>
+
+    <div class="button-group">
+      <ion-button expand="block" (click)="takePhoto()" color="primary">
+        <ion-icon name="camera" slot="start"></ion-icon>
+        Take Photo
+      </ion-button>
+
+      <ion-button
+        *ngIf="photoData"
+        expand="block"
+        color="danger"
+        (click)="clearPhoto()"
+      >
+        Clear Photo
+      </ion-button>
+
+      <ion-button expand="block" color="success" (click)="navigateToCalculator()">
+        Go to Calculator
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
