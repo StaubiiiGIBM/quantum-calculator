@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Quantum Calculator
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="calculator-content">
+  <div class="calculator-container">
+    <ion-card class="display-card">
+      <ion-card-content>
+        <div class="expression">
+          {{ expression || '0' }}
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-grid class="calculator-grid">
+      <ion-row>
+        <ion-col size="12">
+          <ion-button expand="block" color="danger" (click)="clear()">
+            Clear
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngFor="let row of [0, 1, 2, 3]">
+        <ion-col *ngFor="let col of [0, 1, 2, 3]" size="3">
+          <ion-button
+            expand="block"
+            [color]="isOperator(buttons[row * 4 + col]) ? 'primary' : 'light'"
+            (click)="onButtonClick(buttons[row * 4 + col])">
+            {{ buttons[row * 4 + col] }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
