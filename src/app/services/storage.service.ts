@@ -66,7 +66,6 @@ export class StorageService {
             expression: record.expression,
             result: record.result,
             inaccuracy: record.inaccuracy,
-            image_data: record.imageData,
             created_at: new Date(record.timestamp).toISOString(),
           },
         ]),
