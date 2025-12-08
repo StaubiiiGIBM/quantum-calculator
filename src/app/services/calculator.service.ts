@@ -21,7 +21,7 @@ export class CalculatorService {
     this.expression = '';
   }
 
-  calculate(): { result: number; inaccurateResult: number } {
+  calculate(): { result: number; inaccurateResult: number; inaccuracyPercentage: number } {
     try {
       // Trim expression
       let exp = this.expression.trim();
@@ -41,14 +41,16 @@ export class CalculatorService {
         throw new Error('Invalid calculation result');
       }
 
-      // Calculate inaccuracy (±1%)
-      const inaccuracy = (result * this.inaccuracyPercentage) / 100;
+      // Calculate inaccuracy (random between 0% and max inaccuracy percentage)
+      const randomInaccuracyPercentage = this.inaccuracyPercentage * Math.random();
+      const inaccuracy = (result * randomInaccuracyPercentage) / 100;
       const inaccurateResult =
         result + (Math.random() > 0.5 ? inaccuracy : -inaccuracy);
 
       return {
         result: Math.round(result * 100) / 100,
         inaccurateResult: Math.round(inaccurateResult * 100) / 100,
+        inaccuracyPercentage: Math.round(randomInaccuracyPercentage * 100) / 100,
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Invalid expression';

@@ -98,12 +98,14 @@ export class CalculatorPage {
 
     let result: number;
     let inaccurateResult: number;
+    let inaccuracyPercentage: number;
 
     // Attempt calculation
     try {
       const res = this.calculatorService.calculate();
       result = res.result;
       inaccurateResult = res.inaccurateResult;
+      inaccuracyPercentage = res.inaccuracyPercentage;
     } catch (err) {
       console.error('Calculation eval error:', err);
       this.expression = 'Error: Invalid expression';
@@ -120,7 +122,7 @@ export class CalculatorPage {
         expression: this.expression,
         result: inaccurateResult,
         imageData: undefined,
-        inaccuracy: 1,
+        inaccuracy: inaccuracyPercentage,
         timestamp: Date.now(),
       });
     } catch (err) {
