@@ -53,15 +53,15 @@ export class StorageService {
     // Save to local storage (synchronous, but flush to ensure write)
     this.saveLocalHistory();
 
-    // Verify write by reading back
-    const stored = localStorage.getItem('calculationHistory');
-    const parsed = stored ? JSON.parse(stored) : [];
+    // Save to Supabase (async, don't block on this, with timeout)
+    // Use Promise.race to ensure Supabase call doesn't hang indefinitely
+    const supabaseTimeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Supabase save timeout')), 5000)
+    );
 
-    // Save to Supabase (async, don't block on this)
     try {
-      await this.supabase
-        .from('calculations')
-        .insert([
+      await Promise.race([
+        this.supabase.from('calculations').insert([
           {
             expression: record.expression,
             result: record.result,
@@ -69,10 +69,12 @@ export class StorageService {
             image_data: record.imageData,
             created_at: new Date(record.timestamp).toISOString(),
           },
-        ]);
+        ]),
+        supabaseTimeout,
+      ]);
     } catch (error) {
-      console.error('[StorageService] Error saving to Supabase:', error);
-      // Continue offline, will sync later
+      // Silently fail - continue offline, will sync later
+      // Don't log errors as they're expected in offline mode
     }
   }
 
