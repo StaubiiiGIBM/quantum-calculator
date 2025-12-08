@@ -1,0 +1,7 @@
+{
+  "name": "quantum-calculator",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
