@@ -9,6 +9,7 @@ import {
   IonImg,
   IonCard,
   IonCardContent,
+  IonButton,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -27,6 +28,7 @@ import { Router } from '@angular/router';
     IonImg,
     IonCard,
     IonCardContent,
+    IonButton,
     CommonModule,
   ],
 })
@@ -77,6 +79,12 @@ export class ProcessingPage implements OnInit, OnDestroy {
 
   // Called every time view is entered
   ionViewWillEnter(): void {
+    // Hide the tab bar while processing
+    const tabBar = document.querySelector('ion-tab-bar');
+    if (tabBar) {
+      tabBar.style.display = 'none';
+    }
+
     // Try to get fresh navigation state, or fall back to last captured state
     const nav = this.router.getCurrentNavigation();
     const state = nav?.extras?.state ?? this.lastNavigationState ?? (window as any).history.state;
@@ -103,6 +111,11 @@ export class ProcessingPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.clearTimers();
+    // Show the tab bar again when leaving
+    const tabBar = document.querySelector('ion-tab-bar');
+    if (tabBar) {
+      tabBar.style.display = '';
+    }
   }
 
   private startLoading(): void {
@@ -154,5 +167,16 @@ export class ProcessingPage implements OnInit, OnDestroy {
       // fallback: simple navigation
       this.router.navigateByUrl('/tabs/result');
     }
+  }
+
+  cancelProcessing(): void {
+    // Clear timers and show tab bar again
+    this.clearTimers();
+    const tabBar = document.querySelector('ion-tab-bar');
+    if (tabBar) {
+      tabBar.style.display = '';
+    }
+    // Navigate back to calculator
+    this.router.navigate(['/tabs/calculator']);
   }
 }
