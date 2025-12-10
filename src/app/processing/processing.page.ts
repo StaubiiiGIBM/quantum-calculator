@@ -13,6 +13,7 @@ import {
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 @Component({
   selector: 'app-processing',
@@ -78,7 +79,7 @@ export class ProcessingPage implements OnInit, OnDestroy {
   }
 
   // Called every time view is entered
-  ionViewWillEnter(): void {
+  async ionViewWillEnter(): Promise<void> {
     // Hide the tab bar while processing
     const tabBar = document.querySelector('ion-tab-bar');
     if (tabBar) {
@@ -105,6 +106,14 @@ export class ProcessingPage implements OnInit, OnDestroy {
     this.progress = 0;
     this.messageIndex = 0;
     this.currentMessage = '';
+
+    // Prepare notifications (request permission and create channel)
+    try {
+      await this.prepareNotifications();
+    } catch (e) {
+      // ignore notification setup errors; app should continue
+      console.warn('Notification setup failed', e);
+    }
 
     this.startLoading();
   }
@@ -133,7 +142,8 @@ export class ProcessingPage implements OnInit, OnDestroy {
 
       if (this.progress >= 1) {
         this.clearTimers();
-        this.navigateToResult();
+        // fire notification then navigate
+        this.onProcessingComplete();
       }
     }, 100);
   }
@@ -166,6 +176,61 @@ export class ProcessingPage implements OnInit, OnDestroy {
     } catch (err) {
       // fallback: simple navigation
       this.router.navigateByUrl('/tabs/result');
+    }
+  }
+
+  private async onProcessingComplete(): Promise<void> {
+    try {
+      await this.sendCompletionNotification();
+    } catch (e) {
+      // ignore notification errors
+      console.warn('Failed to send completion notification', e);
+    }
+
+    this.navigateToResult();
+  }
+
+  private async prepareNotifications(): Promise<void> {
+    try {
+      // Request permission to show notifications
+      const perm = await LocalNotifications.requestPermissions();
+      if (perm && perm.display === 'granted') {
+        // Create an Android channel (no-op on iOS)
+        try {
+          await LocalNotifications.createChannel({
+            id: 'calculations',
+            name: 'Calculations',
+            importance: 5,
+            description: 'Notifications when calculations complete',
+          });
+        } catch (e) {
+          // some platforms may not support channels programmatically; continue
+        }
+      }
+    } catch (e) {
+      // ignore
+      console.warn('LocalNotifications permission request failed', e);
+    }
+  }
+
+  private async sendCompletionNotification(): Promise<void> {
+    try {
+      const id = Math.floor(Date.now() % 100000);
+      await LocalNotifications.schedule({
+        notifications: [
+          {
+            id,
+            title: 'Calculation completed',
+            body: 'Calculation completed — check the app for the result',
+            smallIcon: undefined,
+            largeIcon: undefined,
+            channelId: 'calculations',
+            extra: { expression: this.expression },
+          },
+        ],
+      });
+    } catch (e) {
+      console.warn('Failed to schedule local notification', e);
     }
   }
 
