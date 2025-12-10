@@ -1,3 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title slot="start">Quantum Calculator</ion-title>
+    <ion-button slot="end" fill="clear" (click)="toggleTheme()" aria-label="Toggle theme">
+      <ion-icon [name]="isDark ? 'sunny' : 'moon'" size="large"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
 <ion-tabs>
   <ion-tab-bar slot="bottom">
     <ion-tab-button tab="camera" href="/tabs/camera">
