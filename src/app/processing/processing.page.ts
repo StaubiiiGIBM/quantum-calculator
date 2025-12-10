@@ -164,6 +164,12 @@ export class ProcessingPage implements OnInit, OnDestroy {
   }
 
   private navigateToResult(): void {
+    // Restore the navigation before navigating away
+    const tabBar = document.querySelector('ion-tab-bar');
+    if (tabBar) {
+      tabBar.style.display = '';
+    }
+
     // Pass display/actual result to Result Page so it can show the same inaccurate value
     try {
       this.router.navigate(['/tabs/result'], {
