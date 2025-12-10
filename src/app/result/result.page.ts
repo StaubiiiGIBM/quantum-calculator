@@ -99,6 +99,8 @@ export class ResultPage implements OnInit {
       this.storageService.clearHistory();
       this.calculationHistory = [];
       this.latestCalculation = null;
+      this.displayValue = null;
+      this.displayExpression = null;
     }
   }
 }
