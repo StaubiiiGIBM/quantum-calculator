@@ -68,12 +68,7 @@ ionic serve
 ```
 Opens at `http://localhost:8101`
 
-### Build npm Production
-```bash
-npm run build
-```
-
-### Build Android APK
+### Build Application
 ```bash
 ionic build
 npx cap sync android
@@ -90,7 +85,7 @@ npx cap sync android
     .\emulator.exe -avd {Emulator_Name}
 ```
 
-2. Deploy app on emulator
+2. Create and Deploy apk on emulator
 ```bash
     npx cap run android
 ```
